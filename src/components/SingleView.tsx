@@ -11,7 +11,7 @@ const SingleView = (props: {item: MediaItem | undefined; setSelectedItem: (item:
         }}
       ></button>
 
-      <dialog open>{item && <img src={item?.filename} alt={item?.title} />}</dialog>
+      <dialog open>{item && <img src={item.filename} alt={item.title} />}</dialog>
     </>
   );
 };
