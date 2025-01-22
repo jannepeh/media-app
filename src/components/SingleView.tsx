@@ -11,7 +11,25 @@ const SingleView = (props: {item: MediaItem | undefined; setSelectedItem: (item:
         }}
       ></button>
 
-      <dialog open>{item && <img src={item?.filename} alt={item?.title} />}</dialog>
+      <dialog className="media-dialog" open>
+        {item && (
+          <>
+            <button className="close-button" onClick={() => setSelectedItem(undefined)}>
+              Close
+            </button>
+            <h1>{item.title}</h1>
+            <p>{item.description}</p>
+            {item.media_type.startsWith('video') ? (
+              <video controls>
+                <source src={item.filename} type={item.media_type} />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img src={item.filename} alt={item.title} />
+            )}
+          </>
+        )}
+      </dialog>
     </>
   );
 };
