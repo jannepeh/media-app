@@ -19,6 +19,7 @@ const SingleView = (props: {item: MediaItem | undefined; setSelectedItem: (item:
             </button>
             <h1>{item.title}</h1>
             <p>{item.description}</p>
+            <p>Created at: {new Date(item.created_at).toLocaleString('fi-FI')}</p>
             {item.media_type.startsWith('video') ? (
               <video controls>
                 <source src={item.filename} type={item.media_type} />
