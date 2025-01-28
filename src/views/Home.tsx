@@ -6,13 +6,42 @@ import {fetchData} from '../lib/functions';
 
 const Home = () => {
   const [mediaArray, setMediaArray] = useState<MediaItem[]>([]);
-  const [selectedItem, setSelectedItem] = useState<MediaItem | undefined>(undefined);
+  const [selectedItem, setSelectedItem] = useState<MediaItem | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     const getMedia = async () => {
       try {
-        const json = await fetchData<MediaItem[]>('test.json');
-        setMediaArray(json);
+        // Kaikki kuvat ilman thumbnailia tai screenshotteja
+        const media = await fetchData<MediaItem[]>(
+          import.meta.env.VITE_MEDIA_API + '/media',
+        );
+        // haetaan mediat id:n perusteella, jotta saadaan thumbnailit
+        const mediaWithThumbs = await Promise.all(
+          media.map(async (item) => {
+            const MediaItem = await fetchData<MediaItem>(
+              import.meta.env.VITE_MEDIA_API + '/media/' + item.media_id,
+            );
+            MediaItem.filename =
+              import.meta.env.VITE_FILE_URL + MediaItem.filename;
+            MediaItem.thumbnail = MediaItem.thumbnail
+              ? import.meta.env.VITE_FILE_URL + MediaItem.thumbnail
+              : null;
+            if (MediaItem.screenshots) {
+              MediaItem.screenshots = JSON.parse(
+                MediaItem.screenshots as string,
+              ).map((screenshot: string) => {
+                return import.meta.env.VITE_FILE_URL + screenshot;
+              });
+            }
+            return MediaItem;
+          }),
+        );
+
+        console.log(mediaWithThumbs);
+
+        setMediaArray(mediaWithThumbs);
       } catch (error) {
         console.error((error as Error).message);
       }
@@ -25,7 +54,9 @@ const Home = () => {
 
   return (
     <>
-      {selectedItem && <SingleView item={selectedItem} setSelectedItem={setSelectedItem} />}
+      {selectedItem && (
+        <SingleView item={selectedItem} setSelectedItem={setSelectedItem} />
+      )}
       <h2>My Media</h2>
       <table>
         <thead>
@@ -40,7 +71,11 @@ const Home = () => {
         </thead>
         <tbody>
           {mediaArray.map((item) => (
-            <MediaRow key={item.media_id} item={item} setSelectedItem={setSelectedItem} />
+            <MediaRow
+              key={item.media_id}
+              item={item}
+              setSelectedItem={setSelectedItem}
+            />
           ))}
         </tbody>
       </table>
