@@ -5,6 +5,7 @@ import Profile from './views/Profile';
 import Upload from './views/Upload';
 import Layout from './components/Layout';
 import Single from './views/Single';
+import Example from './views/Example';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/Profile" element={<Profile />}></Route>
             <Route path="/Upload" element={<Upload />}></Route>
             <Route path="/Single" element={<Single />}></Route>
+            <Route path="/Example" element={<Example />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
