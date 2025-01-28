@@ -1,9 +1,9 @@
-import {MediaItem} from 'hybrid-types/DBTypes';
+import {MediaItemWithOwner} from 'hybrid-types/DBTypes';
 import {Link} from 'react-router-dom';
 
 type MediaItemProps = {
-  item: MediaItem;
-  setSelectedItem: (item: MediaItem | undefined) => void;
+  item: MediaItemWithOwner;
+  setSelectedItem: (item: MediaItemWithOwner | undefined) => void;
 };
 
 const MediaRow = (props: MediaItemProps) => {
@@ -24,6 +24,7 @@ const MediaRow = (props: MediaItemProps) => {
       <td>{new Date(item.created_at).toLocaleString('fi-FI')}</td>
       <td>{item.filesize}</td>
       <td>{item.media_type}</td>
+      <td>{item.username}</td>
       <td>
         <Link to="/Single" state={{item}}>
           Show
