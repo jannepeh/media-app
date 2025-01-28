@@ -11,7 +11,13 @@ const MediaRow = (props: MediaItemProps) => {
   return (
     <tr>
       <td>
-        <img src={item.thumbnail || undefined} alt={item.title} />
+        <img
+          src={
+            item.thumbnail ||
+            (item.screenshots && item.screenshots[2]) ||
+            undefined
+          }
+        />
       </td>
       <td>{item.title}</td>
       <td>{item.description}</td>

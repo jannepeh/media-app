@@ -13,9 +13,9 @@ const Single = () => {
       <p>Size: {Math.round(item.filesize / 1024)} KB</p>{' '}
       <p>Created at: {new Date(item.created_at).toLocaleString('fi-FI')}</p>
       <div className="media-container">
-        {item.media_type.startsWith('video') ? (
+        {item.media_type.includes('video') ? (
           <video controls>
-            <source src={item.filename} type={item.media_type} />
+            <source src={item.filename} />
             Your browser does not support the video tag.
           </video>
         ) : (

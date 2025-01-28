@@ -28,7 +28,10 @@ const Home = () => {
             MediaItem.thumbnail = MediaItem.thumbnail
               ? import.meta.env.VITE_FILE_URL + MediaItem.thumbnail
               : null;
-            if (MediaItem.screenshots) {
+            if (
+              MediaItem.screenshots &&
+              typeof MediaItem.screenshots === 'string'
+            ) {
               MediaItem.screenshots = JSON.parse(
                 MediaItem.screenshots as string,
               ).map((screenshot: string) => {
