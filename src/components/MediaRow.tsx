@@ -1,5 +1,5 @@
 import {MediaItemWithOwner} from 'hybrid-types/DBTypes';
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router';
 
 type MediaItemProps = {
   item: MediaItemWithOwner;
@@ -17,6 +17,7 @@ const MediaRow = (props: MediaItemProps) => {
             (item.screenshots && item.screenshots[2]) ||
             undefined
           }
+          alt={item.title}
         />
       </td>
       <td>{item.title}</td>
@@ -26,7 +27,7 @@ const MediaRow = (props: MediaItemProps) => {
       <td>{item.media_type}</td>
       <td>{item.username}</td>
       <td>
-        <Link to="/Single" state={{item}}>
+        <Link to="/single" state={{item}}>
           Show
         </Link>
       </td>

@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const getMedia = async () => {
       try {
-        // Kaikki mediat ilman omistajan tietoja
+        // kaikki mediat ilman omistajan tietoja
         const media = await fetchData<MediaItem[]>(
           import.meta.env.VITE_MEDIA_API + '/media',
         );
@@ -25,25 +25,14 @@ const Home = () => {
         const mediaWithOwner: MediaItemWithOwner[] = await Promise.all(
           media.map(async (item) => {
             const owner = await fetchData<UserWithNoPassword>(
-              import.meta.env.VITE_AUTH_API + '/users/' + item.media_id,
+              import.meta.env.VITE_AUTH_API + '/users/' + item.user_id,
             );
 
-            const MediaItem: MediaItemWithOwner = {
+            const mediaItem: MediaItemWithOwner = {
               ...item,
               username: owner.username,
             };
-
-            if (
-              MediaItem.screenshots &&
-              typeof MediaItem.screenshots === 'string'
-            ) {
-              MediaItem.screenshots = JSON.parse(
-                MediaItem.screenshots as string,
-              ).map((screenshot: string) => {
-                return import.meta.env.VITE_FILE_URL + screenshot;
-              });
-            }
-            return MediaItem;
+            return mediaItem;
           }),
         );
 
@@ -81,8 +70,8 @@ const Home = () => {
         <tbody>
           {mediaArray.map((item) => (
             <MediaRow
-              key={item.media_id}
               item={item}
+              key={item.media_id}
               setSelectedItem={setSelectedItem}
             />
           ))}
@@ -91,5 +80,4 @@ const Home = () => {
     </>
   );
 };
-
 export default Home;
