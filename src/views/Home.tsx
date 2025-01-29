@@ -1,47 +1,44 @@
-import {MediaItem} from 'hybrid-types/DBTypes';
+import {
+  MediaItem,
+  MediaItemWithOwner,
+  UserWithNoPassword,
+} from 'hybrid-types/DBTypes';
 import MediaRow from '../components/MediaRow';
 import {useEffect, useState} from 'react';
 import SingleView from '../components/SingleView';
 import {fetchData} from '../lib/functions';
 
 const Home = () => {
-  const [mediaArray, setMediaArray] = useState<MediaItem[]>([]);
-  const [selectedItem, setSelectedItem] = useState<MediaItem | undefined>(
-    undefined,
-  );
+  const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
+  const [selectedItem, setSelectedItem] = useState<
+    MediaItemWithOwner | undefined
+  >(undefined);
 
   useEffect(() => {
     const getMedia = async () => {
       try {
-        // Kaikki kuvat ilman thumbnailia tai screenshotteja
+        // kaikki mediat ilman omistajan tietoja
         const media = await fetchData<MediaItem[]>(
           import.meta.env.VITE_MEDIA_API + '/media',
         );
-        // haetaan mediat id:n perusteella, jotta saadaan thumbnailit
-        const mediaWithThumbs = await Promise.all(
+        // haetaan omistajat id:n perusteella
+        const mediaWithOwner: MediaItemWithOwner[] = await Promise.all(
           media.map(async (item) => {
-            const MediaItem = await fetchData<MediaItem>(
-              import.meta.env.VITE_MEDIA_API + '/media/' + item.media_id,
+            const owner = await fetchData<UserWithNoPassword>(
+              import.meta.env.VITE_AUTH_API + '/users/' + item.user_id,
             );
-            MediaItem.filename =
-              import.meta.env.VITE_FILE_URL + MediaItem.filename;
-            MediaItem.thumbnail = MediaItem.thumbnail
-              ? import.meta.env.VITE_FILE_URL + MediaItem.thumbnail
-              : null;
-            if (MediaItem.screenshots) {
-              MediaItem.screenshots = JSON.parse(
-                MediaItem.screenshots as string,
-              ).map((screenshot: string) => {
-                return import.meta.env.VITE_FILE_URL + screenshot;
-              });
-            }
-            return MediaItem;
+
+            const mediaItem: MediaItemWithOwner = {
+              ...item,
+              username: owner.username,
+            };
+            return mediaItem;
           }),
         );
 
-        console.log(mediaWithThumbs);
+        console.log(mediaWithOwner);
 
-        setMediaArray(mediaWithThumbs);
+        setMediaArray(mediaWithOwner);
       } catch (error) {
         console.error((error as Error).message);
       }
@@ -67,13 +64,14 @@ const Home = () => {
             <th>Created</th>
             <th>Size</th>
             <th>Type</th>
+            <th>Owner</th>
           </tr>
         </thead>
         <tbody>
           {mediaArray.map((item) => (
             <MediaRow
-              key={item.media_id}
               item={item}
+              key={item.media_id}
               setSelectedItem={setSelectedItem}
             />
           ))}
@@ -82,5 +80,4 @@ const Home = () => {
     </>
   );
 };
-
 export default Home;

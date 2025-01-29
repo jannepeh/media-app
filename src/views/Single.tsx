@@ -1,30 +1,31 @@
-import {MediaItem} from 'hybrid-types/DBTypes';
-import {useLocation} from 'react-router-dom';
-import {NavigateFunction, useNavigate} from 'react-router-dom';
+import {MediaItemWithOwner} from 'hybrid-types/DBTypes';
+import {NavigateFunction, useLocation, useNavigate} from 'react-router';
 
 const Single = () => {
-  const {state} = useLocation();
-  const item: MediaItem = state.item;
   const navigate: NavigateFunction = useNavigate();
+  const {state} = useLocation();
+  const item: MediaItemWithOwner = state.item;
   return (
     <>
-      <h1>{item.title}</h1>
+      <h2>Single</h2>
+      <h3>{item.title}</h3>
+      <p>{new Date(item.created_at).toLocaleString('fi-FI')}</p>
+      {item.media_type.includes('image') ? (
+        <img src={item.filename} alt={item.title} />
+      ) : (
+        <video src={item.filename} controls />
+      )}
       <p>{item.description}</p>
-      <p>Size: {Math.round(item.filesize / 1024)} KB</p>{' '}
-      <p>Created at: {new Date(item.created_at).toLocaleString('fi-FI')}</p>
-      <div className="media-container">
-        {item.media_type.startsWith('video') ? (
-          <video controls>
-            <source src={item.filename} type={item.media_type} />
-            Your browser does not support the video tag.
-          </video>
-        ) : (
-          <img src={item.filename} alt={item.title} />
-        )}
-        <button className="go-back-button" onClick={() => navigate(-1)}>
-          Go back
-        </button>
-      </div>
+      <p>Owner: {item.username}</p>
+      <p>Type: {item.media_type}</p>
+      <p>Size: {Math.round(item.filesize / 1024)} kB</p>
+      <button
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        go back
+      </button>
     </>
   );
 };
