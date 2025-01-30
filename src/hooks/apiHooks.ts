@@ -5,9 +5,12 @@ import {
 } from 'hybrid-types/DBTypes';
 import {useEffect, useState} from 'react';
 import {fetchData} from '../lib/functions';
+import {Credentials, RegisterCredentials} from '../types/LocalTypes';
+import {LoginResponse, UserResponse} from 'hybrid-types/MessageTypes';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
+
   useEffect(() => {
     const getMedia = async () => {
       try {
@@ -44,12 +47,61 @@ const useMedia = () => {
   return {mediaArray};
 };
 
+const useAuthentication = () => {
+  const postLogin = async (credentials: Credentials) => {
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+      headers: {'Content-Type': 'application/json'},
+    };
+    try {
+      return await fetchData<LoginResponse>(
+        import.meta.env.VITE_AUTH_API + '/auth/login',
+        options,
+      );
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  return {postLogin};
+};
+
 const useUser = () => {
   // TODO: implement auth/user server API connections here
+  const getUserByToken = async (token: string) => {
+    const options = {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    return await fetchData<UserResponse>(
+      import.meta.env.VITE_AUTH_API + '/users/token',
+      options,
+    );
+  };
+
+  const postRegister = async (credentials: RegisterCredentials) => {
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+      headers: {'Content-Type': 'application/json'},
+    };
+    try {
+      return await fetchData<UserResponse>(
+        import.meta.env.VITE_AUTH_API + '/users',
+        options,
+      );
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  return {getUserByToken, postRegister};
 };
 
 const useComments = () => {
-  // TODO: implement media/comments rescourse API connections here
+  // TODO: implement media/comments resource API connections here
 };
 
-export {useMedia, useUser, useComments};
+export {useMedia, useAuthentication, useUser, useComments};
