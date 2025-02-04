@@ -16,7 +16,6 @@ const RegisterForm = () => {
       console.log('doLogin result', registerResult);
     } catch (error) {
       console.error((error as Error).message);
-      // Display error to user here(?)
     }
   };
 
