@@ -75,10 +75,14 @@ const useUser = () => {
         Authorization: 'Bearer ' + token,
       },
     };
-    return await fetchData<UserResponse>(
-      import.meta.env.VITE_AUTH_API + '/users/token',
-      options,
-    );
+    try {
+      return await fetchData<UserResponse>(
+        import.meta.env.VITE_AUTH_API + '/users/token',
+        options,
+      );
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
   };
 
   const postRegister = async (credentials: RegisterCredentials) => {
