@@ -1,9 +1,12 @@
 import {ChangeEvent, useState} from 'react';
 import {useForm} from '../hooks/FormHooks';
+import {useFile, useMedia} from '../hooks/apiHooks';
 
 const Upload = () => {
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const {postFile} = useFile();
+  const {postMedia} = useMedia();
   const initValues = {
     title: '',
     description: '',
@@ -17,16 +20,20 @@ const Upload = () => {
 
   const doUpload = async () => {
     setUploading(true);
-    setTimeout(() => {
-      setUploading(false);
-    }, 3000);
+
     console.log(inputs);
     try {
-      // TODO: call postFile function (see below)
-      // TODO: call postMedia function (see below)
-      // TODO: redirect to Home
+      const token = localStorage.getItem('token');
+      if (!file || !token) {
+        return;
+      }
+      const fileResult = await postFile(file, token);
+      await postMedia(fileResult, inputs, token);
+      setUploading(false);
     } catch (e) {
       console.log((e as Error).message);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -79,7 +86,11 @@ const Upload = () => {
         />
         <button
           type="submit"
-          disabled={file && inputs.title.length > 3 ? false : true}
+          disabled={
+            file && inputs.title.length > 3 && inputs.description.length > 0
+              ? false
+              : true
+          }
         >
           Upload
         </button>
