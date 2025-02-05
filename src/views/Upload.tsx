@@ -1,10 +1,13 @@
 import {ChangeEvent, useState} from 'react';
 import {useForm} from '../hooks/FormHooks';
 import {useFile, useMedia} from '../hooks/apiHooks';
+// import {useNavigate} from 'react-router-dom';
 
 const Upload = () => {
   const [uploading, setUploading] = useState(false);
+  const [uploadResult, setUploadResult] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  // const navigate = useNavigate();
   const {postFile} = useFile();
   const {postMedia} = useMedia();
   const initValues = {
@@ -30,22 +33,32 @@ const Upload = () => {
       const fileResult = await postFile(file, token);
       await postMedia(fileResult, inputs, token);
       setUploading(false);
+      // redirect to home
+      // navigate('/');
+      //or notify user & clear inputs
+      setUploadResult('Media file uploaded!');
+      resetForm();
     } catch (e) {
       console.log((e as Error).message);
+      setUploadResult((e as Error).message);
     } finally {
       setUploading(false);
     }
   };
 
-  const {handleSubmit, handleInputChange, inputs} = useForm(
+  const {handleSubmit, handleInputChange, inputs, setInputs} = useForm(
     doUpload,
     initValues,
   );
 
+  const resetForm = () => {
+    setInputs(initValues);
+    setFile(null);
+  };
+
   return (
     <>
       <h1>Upload</h1>
-      {uploading && <p>Uploading...</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Title</label>
@@ -54,6 +67,7 @@ const Upload = () => {
             type="text"
             id="title"
             onChange={handleInputChange}
+            value={inputs.title}
           />
         </div>
         <div>
@@ -63,6 +77,7 @@ const Upload = () => {
             rows={5}
             id="description"
             onChange={handleInputChange}
+            value={inputs.description}
           ></textarea>
         </div>
         <div>
@@ -73,6 +88,7 @@ const Upload = () => {
             id="file"
             accept="image/*, video/*"
             onChange={handleFileChange}
+            // TODO: reset filename in form
           />
         </div>
         <img
@@ -92,8 +108,12 @@ const Upload = () => {
               : true
           }
         >
-          Upload
+          {uploading ? 'Uploading...' : 'Upload'}
         </button>
+        <button type="reset" onClick={resetForm}>
+          Reset
+        </button>
+        <p>{uploadResult}</p>
       </form>
     </>
   );
