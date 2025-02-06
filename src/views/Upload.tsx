@@ -1,12 +1,13 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useRef, useState} from 'react';
 import {useForm} from '../hooks/FormHooks';
 import {useFile, useMedia} from '../hooks/apiHooks';
 // import {useNavigate} from 'react-router-dom';
 
 const Upload = () => {
-  const [uploading, setUploading] = useState(false);
-  const [uploadResult, setUploadResult] = useState('');
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadResult, setUploadResult] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   // const navigate = useNavigate();
   const {postFile} = useFile();
   const {postMedia} = useMedia();
@@ -54,6 +55,9 @@ const Upload = () => {
   const resetForm = () => {
     setInputs(initValues);
     setFile(null);
+    if (fileRef.current) {
+      fileRef.current.value = '';
+    }
   };
 
   return (
@@ -88,7 +92,8 @@ const Upload = () => {
             id="file"
             accept="image/*, video/*"
             onChange={handleFileChange}
-            // TODO: reset filename in form
+            // reference for useRef hook
+            ref={fileRef}
           />
         </div>
         <img
@@ -110,9 +115,7 @@ const Upload = () => {
         >
           {uploading ? 'Uploading...' : 'Upload'}
         </button>
-        <button type="reset" onClick={resetForm}>
-          Reset
-        </button>
+        <button onClick={resetForm}>Reset</button>
         <p>{uploadResult}</p>
       </form>
     </>
