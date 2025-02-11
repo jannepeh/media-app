@@ -7,6 +7,7 @@ import {useEffect, useState} from 'react';
 import {fetchData} from '../lib/functions';
 import {Credentials, RegisterCredentials} from '../types/LocalTypes';
 import {
+  AvailableResponse,
   LoginResponse,
   MessageResponse,
   UploadResponse,
@@ -121,7 +122,6 @@ const useAuthentication = () => {
 };
 
 const useUser = () => {
-  // TODO: implement auth/user server API connections here
   const getUserByToken = async (token: string) => {
     const options = {
       headers: {
@@ -136,6 +136,23 @@ const useUser = () => {
     } catch (error) {
       throw new Error((error as Error).message);
     }
+  };
+
+  const getUsernameAvailable = async (username: string) => {
+    try {
+      return await fetchData<AvailableResponse>(
+        `${import.meta.env.VITE_AUTH_API}/users/username/${username}`,
+      );
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const getEmailAvailable = async (email: string) => {
+    console.log(email);
+    return await fetchData<AvailableResponse>(
+      `${import.meta.env.VITE_AUTH_API}/users/email/${email}`,
+    );
   };
 
   const postRegister = async (credentials: RegisterCredentials) => {
@@ -154,7 +171,12 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken, postRegister};
+  return {
+    getUserByToken,
+    postRegister,
+    getUsernameAvailable,
+    getEmailAvailable,
+  };
 };
 
 const useComments = () => {

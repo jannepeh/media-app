@@ -1,5 +1,6 @@
+import {Link} from 'react-router-dom';
 import {MediaItemWithOwner} from 'hybrid-types/DBTypes';
-import {Link} from 'react-router';
+import {useUserContext} from '../hooks/ContextHooks';
 
 type MediaItemProps = {
   item: MediaItemWithOwner;
@@ -8,6 +9,8 @@ type MediaItemProps = {
 
 const MediaRow = (props: MediaItemProps) => {
   const {item} = props;
+  const {user} = useUserContext();
+
   return (
     <article className="w-full rounded-md bg-stone-600">
       <img
@@ -25,23 +28,34 @@ const MediaRow = (props: MediaItemProps) => {
           {item.description}
         </p>
         <div className="my-2 rounded-md border-1 border-stone-400 p-2">
-          <p>
-            Created at: <br />{' '}
-            {new Date(item.created_at).toLocaleString('fi-FI')}
-          </p>
-          <p>Filesize: {(item.filesize / 1024 / 1024).toFixed(2)} MB</p>
-          <p>Mime-type: {item.media_type}</p>
-          <p>Owner: {item.username}</p>
-        </div>
-        <p>
           <Link
-            className="block bg-stone-500 p-2 text-center transition-all duration-500 ease-in-out hover:bg-stone-700"
             to="/single"
             state={{item}}
+            className="block w-full cursor-pointer bg-blue-600 p-2 text-center transition-all duration-500 ease-in-out hover:bg-blue-800"
           >
             Show
           </Link>
-        </p>
+          {(user?.user_id === item.user_id || user?.level_name === 'Admin') && (
+            <>
+              <button
+                onClick={() => {
+                  console.log('Modify clicked!', item.media_id);
+                }}
+                className="block w-full cursor-pointer bg-green-600 p-2 text-center transition-all duration-500 ease-in-out hover:bg-green-800"
+              >
+                Modify
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Delete clicked!', item.media_id);
+                }}
+                className="block w-full cursor-pointer bg-red-600 p-2 text-center transition-all duration-500 ease-in-out hover:bg-red-800"
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </article>
   );
