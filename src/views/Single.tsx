@@ -11,15 +11,16 @@ const Single = () => {
       <h3>{item.title}</h3>
       <p>{new Date(item.created_at).toLocaleString('fi-FI')}</p>
       {item.media_type.includes('image') ? (
-        <img src={item.filename} alt={item.title} />
+        <img className="max-w-full" src={item.filename} alt={item.title} />
       ) : (
-        <video src={item.filename} controls />
+        <video className="max-w-full" src={item.filename} controls />
       )}
       <p>{item.description}</p>
       <p>Owner: {item.username}</p>
       <p>Type: {item.media_type}</p>
       <p>Size: {Math.round(item.filesize / 1024)} kB</p>
       <button
+        className="m-[5px] cursor-pointer rounded-sm border border-solid border-white bg-white p-[10px] text-black"
         onClick={() => {
           navigate(-1);
         }}

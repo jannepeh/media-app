@@ -1,5 +1,4 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import './App.css';
 import Home from './views/Home';
 import Profile from './views/Profile';
 import Upload from './views/Upload';
