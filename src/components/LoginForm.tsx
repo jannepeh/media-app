@@ -30,10 +30,14 @@ const LoginForm = (props: Props) => {
   return (
     <>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form
+        className="flex flex-col items-center justify-center"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex w-[80%] flex-col">
           <label htmlFor="loginusername">Username</label>
           <input
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px]"
             name="username"
             type="text"
             id="loginusername"
@@ -42,9 +46,10 @@ const LoginForm = (props: Props) => {
             // value={inputs.username}
           />
         </div>
-        <div>
+        <div className="flex w-[80%] flex-col">
           <label htmlFor="loginpassword">Password</label>
           <input
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px]"
             name="password"
             type="password"
             id="loginpassword"
@@ -53,8 +58,18 @@ const LoginForm = (props: Props) => {
             // value={inputs.password}
           />
         </div>
-        <button type="submit">Login</button>
-        <button onClick={toggleRegister}>Register</button>
+        <button
+          className="m-[10px] cursor-pointer rounded-sm border border-solid border-white bg-white p-[10px] text-black"
+          type="submit"
+        >
+          Login
+        </button>
+        <button
+          className="cursor-pointer rounded-sm border border-solid border-white bg-white p-[10px] text-black"
+          onClick={toggleRegister}
+        >
+          Register
+        </button>
       </form>
     </>
   );

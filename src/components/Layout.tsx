@@ -15,25 +15,50 @@ const Layout = () => {
       <h1>My App</h1>
       <div>
         <nav>
-          <ul>
+          <ul className="m-0 flex list-none justify-end overflow-hidden rounded-2xl bg-stone-600 p-0">
             <li>
-              <Link to="/">Home</Link>
+              <Link
+                className="block p-4 text-center transition-all duration-500 ease-in-out hover:bg-stone-700"
+                to="/"
+              >
+                Home
+              </Link>
             </li>
             {user ? (
               <>
                 <li>
-                  <Link to="/Profile">Profile</Link>
+                  <Link
+                    className="block p-4 text-center transition-all duration-500 ease-in-out hover:bg-stone-800"
+                    to="/Profile"
+                  >
+                    Profile
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/Upload">Upload</Link>
+                  <Link
+                    className="block p-4 text-center transition-all duration-500 ease-in-out hover:bg-stone-800"
+                    to="/Upload"
+                  >
+                    Upload
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/Logout">Logout</Link>
+                  <Link
+                    className="block p-4 text-center transition-all duration-500 ease-in-out hover:bg-stone-800"
+                    to="/Logout"
+                  >
+                    Logout
+                  </Link>
                 </li>
               </>
             ) : (
               <li>
-                <Link to="/Login">Login</Link>
+                <Link
+                  className="block p-4 text-center transition-all duration-500 ease-in-out hover:bg-stone-800"
+                  to="/Login"
+                >
+                  Login
+                </Link>
               </li>
             )}
           </ul>

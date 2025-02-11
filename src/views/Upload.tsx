@@ -62,11 +62,17 @@ const Upload = () => {
 
   return (
     <>
-      <h1>Upload</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Title</label>
+      <h1 className="m-1 pb-10">Upload</h1>
+      <form
+        className="flex flex-col items-center justify-center rounded-xl bg-white p-5"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex w-[80%] flex-col">
+          <label className="text-black" htmlFor="title">
+            Title
+          </label>
           <input
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px] text-black"
             name="title"
             type="text"
             id="title"
@@ -74,9 +80,12 @@ const Upload = () => {
             value={inputs.title}
           />
         </div>
-        <div>
-          <label htmlFor="description">Description</label>
+        <div className="flex w-[80%] flex-col">
+          <label className="text-black" htmlFor="description">
+            Description
+          </label>
           <textarea
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px] text-black"
             name="description"
             rows={5}
             id="description"
@@ -84,9 +93,12 @@ const Upload = () => {
             value={inputs.description}
           ></textarea>
         </div>
-        <div>
-          <label htmlFor="file">File</label>
+        <div className="flex w-[80%] flex-col">
+          <label className="text-black" htmlFor="file">
+            File
+          </label>
           <input
+            className="m-[10px 0] mb-10 rounded-sm border border-solid border-stone-300 p-[10px] text-black"
             name="file"
             type="file"
             id="file"
@@ -97,6 +109,7 @@ const Upload = () => {
           />
         </div>
         <img
+          className="m-[10px 0] h-[200px] w-[200px] rounded-2xl object-cover"
           src={
             file
               ? URL.createObjectURL(file)
@@ -106,6 +119,7 @@ const Upload = () => {
           width="200"
         />
         <button
+          className="m-[15px] cursor-pointer rounded-sm border-none bg-green-600 p-[10px] text-white hover:bg-green-800"
           type="submit"
           disabled={
             file && inputs.title.length > 3 && inputs.description.length > 0
@@ -115,7 +129,12 @@ const Upload = () => {
         >
           {uploading ? 'Uploading...' : 'Upload'}
         </button>
-        <button onClick={resetForm}>Reset</button>
+        <button
+          className="m-[15px] cursor-pointer rounded-sm border-none bg-red-600 p-[10px] text-white hover:bg-red-800"
+          onClick={resetForm}
+        >
+          Reset
+        </button>
         <p>{uploadResult}</p>
       </form>
     </>

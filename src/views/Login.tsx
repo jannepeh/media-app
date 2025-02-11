@@ -15,7 +15,10 @@ const Login = () => {
       ) : (
         <LoginForm toggleRegister={toggleRegister} />
       )}
-      <button onClick={toggleRegister}>
+      <button
+        className="m-[5px] cursor-pointer rounded-sm border border-solid border-white bg-white p-[10px] text-black"
+        onClick={toggleRegister}
+      >
         {displayRegister ? 'Login?' : 'Register?'}
       </button>
     </>

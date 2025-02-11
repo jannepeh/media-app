@@ -27,10 +27,14 @@ const RegisterForm = () => {
   return (
     <>
       <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form
+        className="flex flex-col items-center justify-center"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex w-[80%] flex-col">
           <label htmlFor="regusername">Username</label>
           <input
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px]"
             name="username"
             type="text"
             id="regusername"
@@ -38,9 +42,10 @@ const RegisterForm = () => {
             autoComplete="username"
           />
         </div>
-        <div>
+        <div className="flex w-[80%] flex-col">
           <label htmlFor="regpassword">Password</label>
           <input
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px]"
             name="password"
             type="password"
             id="regpassword"
@@ -48,9 +53,10 @@ const RegisterForm = () => {
             autoComplete="current-password"
           />
         </div>
-        <div>
+        <div className="flex w-[80%] flex-col">
           <label htmlFor="regemail">Email</label>
           <input
+            className="m-[10px 0] rounded-sm border border-solid border-stone-300 p-[10px]"
             name="email"
             type="email"
             id="regemail"
@@ -58,7 +64,12 @@ const RegisterForm = () => {
             autoComplete="email"
           />
         </div>
-        <button type="submit">Register</button>
+        <button
+          className="m-[15px] cursor-pointer rounded-sm border border-solid border-white bg-white p-[10px] text-black"
+          type="submit"
+        >
+          Register
+        </button>
       </form>
     </>
   );

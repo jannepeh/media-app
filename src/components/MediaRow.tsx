@@ -10,8 +10,9 @@ const MediaRow = (props: MediaItemProps) => {
   const {item} = props;
   return (
     <tr>
-      <td>
+      <td className="td p-4">
         <img
+          className="img h-[150x] w-[260px] object-cover"
           src={
             item.thumbnail ||
             (item.screenshots && item.screenshots[2]) ||
@@ -20,14 +21,20 @@ const MediaRow = (props: MediaItemProps) => {
           alt={item.title}
         />
       </td>
-      <td>{item.title}</td>
-      <td>{item.description}</td>
-      <td>{new Date(item.created_at).toLocaleString('fi-FI')}</td>
-      <td>{item.filesize}</td>
-      <td>{item.media_type}</td>
-      <td>{item.username}</td>
-      <td>
-        <Link to="/single" state={{item}}>
+      <td className="td p-1">{item.title}</td>
+      <td className="td p-1">{item.description}</td>
+      <td className="td p-1">
+        {new Date(item.created_at).toLocaleString('fi-FI')}
+      </td>
+      <td className="td p-1">{item.filesize}</td>
+      <td className="td p-1">{item.media_type}</td>
+      <td className="td p-1">{item.username}</td>
+      <td className="td p-1">
+        <Link
+          className="transition-all duration-500 ease-in-out hover:bg-stone-700"
+          to="/single"
+          state={{item}}
+        >
           Show
         </Link>
       </td>
