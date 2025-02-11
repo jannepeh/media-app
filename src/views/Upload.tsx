@@ -62,9 +62,9 @@ const Upload = () => {
 
   return (
     <>
-      <h1 className="m-1 pb-10">Upload</h1>
+      <h1 className="m-1 pt-10 pb-10 text-center">Upload</h1>
       <form
-        className="flex flex-col items-center justify-center rounded-xl bg-white p-5"
+        className="flex flex-col items-center justify-center rounded-2xl bg-white pt-10 pb-5"
         onSubmit={handleSubmit}
       >
         <div className="flex w-[80%] flex-col">

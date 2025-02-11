@@ -1,31 +1,27 @@
 @import 'tailwindcss';
 
 @layer base {
-  /* Write your base styles here */
+  /* Your base styles here */
   :root {
-    font-family: var(--font-sans);
-    line-height: 1.5;
-    font-weight: var(--font-weight-normal);
-    color: var(--color-slate-50);
-    background-color: var(--color-stone-800);
+    @apply bg-stone-800 font-sans font-normal text-stone-50 antialiased;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   #root {
-    max-width: var(--container-7xl);
-    margin: auto;
-    /* padding: calc(var(--spacing) * 8); */
+    @apply m-auto max-w-7xl p-8;
   }
 
   h1 {
-    font-size: var(--text-2xl);
+    @apply text-3xl;
   }
 
   h2 {
-    font-size: var(--text-xl);
+    @apply text-2xl font-semibold;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
   }
 }
