@@ -1,4 +1,5 @@
 import {
+  Like,
   MediaItem,
   MediaItemWithOwner,
   UserWithNoPassword,
@@ -183,4 +184,59 @@ const useComments = () => {
   // TODO: implement media/comments resource API connections here
 };
 
-export {useMedia, useAuthentication, useUser, useComments, useFile};
+const useLike = () => {
+  const postLike = async (media_id: number, token: string) => {
+    // Send a POST request to /likes with object { media_id } and the token in the Authorization header.
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({media_id}),
+    };
+    return await fetchData<MessageResponse>(
+      import.meta.env.VITE_MEDIA_API + '/likes',
+      options,
+    );
+  };
+
+  const deleteLike = async (like_id: number, token: string) => {
+    // Send a DELETE request to /likes/:like_id with the token in the Authorization header.
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    return await fetchData<MessageResponse>(
+      import.meta.env.VITE_MEDIA_API + '/likes/' + like_id,
+      options,
+    );
+  };
+
+  const getCountByMediaId = async (media_id: number) => {
+    // Send a GET request to /likes/count/:media_id to get the number of likes.
+    return await fetchData<{count: number}>(
+      import.meta.env.VITE_MEDIA_API + '/likes/count/' + media_id,
+    );
+  };
+
+  const getUserLike = async (media_id: number, token: string) => {
+    // Send a GET request to /likes/bymedia/user/:media_id to get the user's like on the media.
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    return await fetchData<Like>(
+      import.meta.env.VITE_MEDIA_API + '/likes/bymedia/user/' + media_id,
+      options,
+    );
+  };
+
+  return {postLike, deleteLike, getCountByMediaId, getUserLike};
+};
+
+export {useMedia, useAuthentication, useUser, useComments, useFile, useLike};
