@@ -1,5 +1,5 @@
 # React + TypeScript + Vite
-## With branches first-component, state-management and routing
+## Tailwind branch
 
 
 This is a README.md file about the React + TypeScript + Vite exercise that i made during the school lectures
