@@ -14,6 +14,7 @@ import {
   UploadResponse,
   UserResponse,
 } from 'hybrid-types/MessageTypes';
+import {Comment} from 'hybrid-types/DBTypes';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
@@ -156,6 +157,12 @@ const useUser = () => {
     );
   };
 
+  const getUserById = async (id: number) => {
+    return await fetchData<UserWithNoPassword>(
+      import.meta.env.VITE_AUTH_API + '/users/' + id,
+    );
+  };
+
   const postRegister = async (credentials: RegisterCredentials) => {
     const options = {
       method: 'POST',
@@ -177,11 +184,50 @@ const useUser = () => {
     postRegister,
     getUsernameAvailable,
     getEmailAvailable,
+    getUserById,
   };
 };
 
-const useComments = () => {
+const useComment = () => {
+  const {getUserById} = useUser();
   // TODO: implement media/comments resource API connections here
+  const postComment = async (
+    comment_text: string,
+    media_id: number,
+    token: string,
+  ) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({media_id, comment_text}),
+    };
+    return await fetchData<MessageResponse>(
+      import.meta.env.VITE_MEDIA_API + '/comments',
+      options,
+    );
+  };
+
+  const getCommentsByMediaId = async (media_id: number) => {
+    // Send a GET request to /comments/bymedia/:media_id to get the comments.
+    const comments = await fetchData<Comment[]>(
+      import.meta.env.VITE_MEDIA_API + '/comments/bymedia/' + media_id,
+    );
+    // Send a GET request to auth api and add username to all comments
+    const commentsWithUsername = await Promise.all<
+      Comment & {username: string}
+    >(
+      comments.map(async (comment) => {
+        const user = await getUserById(comment.user_id);
+        return {...comment, username: user.username};
+      }),
+    );
+    return commentsWithUsername;
+  };
+
+  return {postComment, getCommentsByMediaId};
 };
 
 const useLike = () => {
@@ -239,4 +285,4 @@ const useLike = () => {
   return {postLike, deleteLike, getCountByMediaId, getUserLike};
 };
 
-export {useMedia, useAuthentication, useUser, useComments, useFile, useLike};
+export {useMedia, useAuthentication, useUser, useComment, useFile, useLike};

@@ -1,6 +1,7 @@
 import {MediaItemWithOwner} from 'hybrid-types/DBTypes';
 import {NavigateFunction, useLocation, useNavigate} from 'react-router';
 import Likes from '../components/Likes';
+import Comments from '../components/Comments';
 
 const Single = () => {
   const navigate: NavigateFunction = useNavigate();
@@ -21,8 +22,9 @@ const Single = () => {
       <p>Owner: {item.username}</p>
       <p>Type: {item.media_type}</p>
       <p>Size: {Math.round(item.filesize / 1024)} kB</p>
+      <Comments item={item} />
       <button
-        className="m-[5px] cursor-pointer rounded-sm border border-solid border-white bg-white p-[10px] text-black"
+        className="block w-full cursor-pointer rounded-md bg-blue-600 p-2 text-center transition-all duration-500 ease-in-out hover:bg-blue-800"
         onClick={() => {
           navigate(-1);
         }}

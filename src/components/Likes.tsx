@@ -93,7 +93,7 @@ const Likes = ({item}: {item: MediaItemWithOwner}) => {
     <>
       <p>Likes: {likeState.count}</p>
       <button
-        className="block w-full cursor-pointer bg-blue-600 p-2 text-center transition-all duration-500 ease-in-out hover:bg-blue-800"
+        className="block w-full cursor-pointer rounded-md bg-blue-600 p-2 text-center transition-all duration-500 ease-in-out hover:bg-blue-800"
         onClick={handleLike}
       >
         {likeState.userLike ? 'Unlike' : 'Like'}
